@@ -3,6 +3,8 @@ from typing import List, TypeVar
 """Module for authorization"""
 
 
+User = TypeVar('User')
+
 class Auth:
     """Defines a class Auth"""
     def require_auth(self, path: str, excluded_paths: List[str]) -> bool:
@@ -13,7 +15,7 @@ class Auth:
         """Returns None"""
         return None
     
-    def current_user(self, request=None) -> TypeVar('User'):
+    def current_user(self, request=None) -> User:
         """Returns None"""
         return None
 
