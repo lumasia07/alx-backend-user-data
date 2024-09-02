@@ -1,6 +1,7 @@
+#!/usr/bin/env python3
+"""Module for authorization"""
 from flask import request
 from typing import List, TypeVar
-"""Module for authorization"""
 
 
 User = TypeVar('User')
