@@ -18,8 +18,8 @@ auth_type = os.getenv('AUTH_TYPE')
 
 if auth_type:
     if auth_type == 'auth':
-        from api.v1.auth.auth import Auth
-        auth = Auth()
+        from api.v1.auth.basic_auth import BasicAuth
+        auth = BasicAuth()
 
 EXCLUDED_PATHS = ['/api/v1/status/', '/api/v1/unauthorized/', '/api/v1/forbidden/']
 
