@@ -50,21 +50,25 @@ class BasicAuth(Auth):
         email, pwd = decoded_base64_authorization_header.split(':', 1)
         return email, pwd
 
-    def user_object_from_credentials(self, user_email: str, user_pwd: str) -> User_1:
-        """Returns user based on email and password"""
+
+    def user_object_from_credentials(self, user_email: str, user_pwd: str) -> User:
+        """Returns user based on email and password."""
         if not isinstance(user_email, str) or user_email is None:
             return None
-        
+
         if not isinstance(user_pwd, str) or user_pwd is None:
             return None
-        
+
         user = User.search({'email': user_email})
 
         if not user:
             return None
-        
-        
-        if user.is_valid_password(user_pwd):
+
+        user = user[0]
+    
+        if not user.is_valid_password(user_pwd):
             return None
-        
+    
         return user
+
+
