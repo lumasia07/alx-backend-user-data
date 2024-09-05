@@ -18,7 +18,6 @@ def get_current_user() -> str:
     return jsonify(request.current_user.to_json())
 
 
-
 @app_views.route('/users', methods=['GET'], strict_slashes=False)
 def view_all_users() -> str:
     """ GET /api/v1/users
