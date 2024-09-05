@@ -28,7 +28,7 @@ if auth_type:
         auth = SessionAuth()
 
 EXCLUDED_PATHS = ['/api/v1/status/', '/api/v1/unauthorized/',
-                  '/api/v1/forbidden/']
+                  '/api/v1/forbidden/', 'api/v1/auth_session/login/']
 
 
 @app.before_request
@@ -44,8 +44,8 @@ def before_request_handler():
     if not auth.require_auth(path, EXCLUDED_PATHS):
         return
 
-    if auth.authorization_header(request) is None:
-        abort(401)
+    if auth.authorization_header(request) is None and auth.session_cookie(request) is None:
+        return None, abort(401)
 
     current_user = auth.current_user(request)
     if current_user is None:
