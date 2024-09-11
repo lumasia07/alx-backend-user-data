@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """DB module
 """
-from sqlalchemy import create_engine, Engine
+from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.orm.session import Session
@@ -16,10 +16,10 @@ class DB:
     def __init__(self) -> None:
         """Initialize a new DB instance
         """
-        self._engine: Engine = create_engine("sqlite:///a.db", echo=False)
+        self._engine = create_engine("sqlite:///a.db", echo=True)
         Base.metadata.drop_all(self._engine)
         Base.metadata.create_all(self._engine)
-        self.__session: Session | None = None
+        self.__session = None
 
     @property
     def _session(self) -> Session:
@@ -29,19 +29,20 @@ class DB:
             DBSession = sessionmaker(bind=self._engine)
             self.__session = DBSession()
         return self.__session
-
+    
     def add_user(self, email: str, hashed_password: str) -> User:
         """Adds a new user to the Database"""
-        new_user: User = User(email=email, hashed_password=hashed_password)
+        new_user = User(email=email, hashed_password=hashed_password)
         self._session.add(new_user)
         self._session.commit()
         return new_user
-
-    def find_user_by(self, **kwargs: dict) -> User:
-        """Find user by arbitrary keyword arguments"""
+    
+    def find_user_by(self, **kwargs) -> User:
+        """Find user by abitrary keyword args"""
         try:
             return self._session.query(User).filter_by(**kwargs).one()
         except NoResultFound:
             raise NoResultFound("No user found with specific arguments")
         except InvalidRequestError:
             raise InvalidRequestError("Invalid Query arguments")
+        
