@@ -15,7 +15,7 @@ class User(Base):
     email = Column(String(250), nullable=False, unique=True)
     hashed_password = Column(String(250), nullable=False)
     session_id = Column(String(250), nullable=True)
-    reset_token = Column(String(250), nullable=False)
+    reset_token = Column(String(250), nullable=True)
 
     def __init__(self, email: str, hashed_password: str,
                  session_id: str = None, reset_token: str = None):
