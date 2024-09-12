@@ -2,7 +2,7 @@
 """Password hashing"""
 import bcrypt
 
-"""Defines a class DB"""
+
 def _hash_password(password: str) -> bytes:
     """Function to hash password"""
 
