@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Password hashing"""
 import bcrypt
+from db import DB
+from user import User
 
 
 def _hash_password(password: str) -> bytes:
@@ -10,3 +12,24 @@ def _hash_password(password: str) -> bytes:
 
     hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
     return hashed
+
+
+class Auth:
+     """Auth class to interact with the authentication database.
+    """
+     def __init__(self):
+          """Instatiate class auth call from DB"""
+          self._db = DB()
+
+
+     def register_user(self, email: str, password: str) -> User:
+         """Register user in DB"""
+         try:
+              self._db.find_user_by(email=email)
+              raise ValueError(f"User {email} already exists")
+         except:
+              hashed = self._hash_password(password)
+              new_user = self._db.add_user(email=email, hashed_password=hashed)
+              return new_user
+
+         
