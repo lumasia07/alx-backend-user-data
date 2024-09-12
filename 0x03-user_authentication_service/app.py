@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """Flask main entry point"""
-from flask import Flask, jsonify, make_response, request, abort
+from flask import Flask, jsonify, make_response, request, abort, redirect, url_for
 from auth import Auth
 
 
@@ -9,7 +9,7 @@ AUTH = Auth()
 
 
 @app.route("/", methods=["GET"])
-def welcome() -> str:
+def index():
     """Return a welcome message as a payload"""
     return jsonify({"message": "Bienvenue"})
 
@@ -46,6 +46,27 @@ def login() -> str:
     response.set_cookie("session_id", session_id)
 
     return response
+
+
+@app.route('/sessions', methods=['DELETE'])
+def logout():
+    """
+    Log out a user by destroying their session.
+    """
+
+    session_id = request.cookies.get('session_id')
+
+    if not session_id:
+        abort(403)
+
+    user = AUTH.get_user_from_session_id(session_id)
+
+    if user is None:
+        abort(403)
+
+    AUTH.destroy_session(user.id)
+
+    return redirect(url_for('index'))
 
 
 if __name__ == "__main__":
