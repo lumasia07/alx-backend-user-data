@@ -1,4 +1,4 @@
-#!/usr/bi/env python3
+#!/usr/bin/env python3
 """Flask main entry point"""
 from flask import Flask, jsonify
 
