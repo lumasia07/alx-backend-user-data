@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 """Password hashing"""
 import bcrypt
+import uuid
 from db import DB
 from user import User
 from sqlalchemy.exc import NoResultFound
@@ -41,3 +42,8 @@ class Auth:
             return False
         except Exception:
             return False
+
+    def a_generate_uuid() -> str:
+        """Generates a new ID and returns str representation"""
+        return str(uuid.uuid4())
+
