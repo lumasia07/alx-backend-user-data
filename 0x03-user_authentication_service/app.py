@@ -1,5 +1,5 @@
 #!/usr/bi/env python3
-"""Falsk main entry point"""
+"""Flask main entry point"""
 from flask import Flask, jsonify
 
 
