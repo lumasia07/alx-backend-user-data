@@ -7,6 +7,11 @@ from user import User
 from sqlalchemy.exc import NoResultFound
 
 
+def a_generate_uuid() -> str:
+    """Generates a new ID and returns str representation"""
+    return str(uuid.uuid4())
+    
+
 class Auth:
     """Auth class to interact with the authentication database.
     """
@@ -42,8 +47,5 @@ class Auth:
             return False
         except Exception:
             return False
-
-    def a_generate_uuid() -> str:
-        """Generates a new ID and returns str representation"""
-        return str(uuid.uuid4())
-
+        
+    def 
