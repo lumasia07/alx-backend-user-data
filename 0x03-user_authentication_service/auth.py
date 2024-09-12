@@ -7,11 +7,6 @@ from user import User
 from sqlalchemy.exc import NoResultFound
 
 
-def a_generate_uuid() -> str:
-    """Generates a new ID and returns str representation"""
-    return str(uuid.uuid4())
-    
-
 class Auth:
     """Auth class to interact with the authentication database.
     """
@@ -47,5 +42,20 @@ class Auth:
             return False
         except Exception:
             return False
+
+    def _generate_uuid(self) -> str:
+        """Generates a new ID and returns str representation"""
+        return str(uuid.uuid4())
+    
+    def create_session(self, email: str) -> str:
+        """Returns session ID"""
+        try:
+            user: User = self._db.find_user_by(email=email)
+        except NoResultFound:
+            raise NoResultFound("No user found with provided credentials")
         
-    def 
+        session_id: str = self._generate_uuid()
+
+        self._db.update_user(user.id, session_id=session_id)
+
+        return session_id
