@@ -1,22 +1,20 @@
 #!/usr/bin/env python3
 """Flask main entry point"""
+
 from flask import Flask, jsonify, make_response, request, abort, redirect, url_for
 from auth import Auth
-
 
 app = Flask(__name__)
 AUTH = Auth()
 
-
 @app.route("/", methods=["GET"])
 def index():
-    """Return a welcome message as a payload"""
+    """Return a welcome message as a payload."""
     return jsonify({"message": "Bienvenue"})
-
 
 @app.route("/users", methods=["POST"])
 def register_user() -> str:
-    """Route to register new user"""
+    """Route to register a new user."""
     email = request.form.get("email")
     password = request.form.get("password")
 
@@ -26,10 +24,8 @@ def register_user() -> str:
     try:
         user = AUTH.register_user(email, password)
         return jsonify({"email": user.email, "message": "user created"}), 201
-
     except ValueError:
-        return jsonify({"message": "email already registered"})
-
+        return jsonify({"message": "email already registered"}), 400  # Changed to 400 for consistency
 
 @app.route('/sessions', methods=['POST'])
 def login() -> str:
@@ -47,13 +43,9 @@ def login() -> str:
 
     return response
 
-
 @app.route('/sessions', methods=['DELETE'])
 def logout():
-    """
-    Log out a user by destroying their session.
-    """
-
+    """Log out a user by destroying their session."""
     session_id = request.cookies.get('session_id')
 
     if not session_id:
@@ -68,12 +60,9 @@ def logout():
 
     return redirect(url_for('index'))
 
-
 @app.route('/profile', methods=['GET'])
 def profile():
-    """
-    Profile route to get user information based on session_id.
-    """
+    """Profile route to get user information based on session_id."""
     session_id = request.cookies.get('session_id')
 
     if not session_id:
@@ -85,7 +74,6 @@ def profile():
         abort(403)
 
     return jsonify({"email": user.email}), 200
-
 
 @app.route('/reset_password', methods=['POST'])
 def get_reset_password_token():
@@ -101,7 +89,6 @@ def get_reset_password_token():
         abort(403, description="Email not registered")
 
     return jsonify({"email": email, "reset_token": reset_token}), 200
-
 
 @app.route('/reset_password', methods=['PUT'])
 def update_password():
@@ -120,7 +107,5 @@ def update_password():
 
     return jsonify({"email": email, "message": "Password updated"}), 200
 
-
-
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port="5000")
+    app.run(host="0.0.0.0", port=5000)
