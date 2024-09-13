@@ -62,12 +62,12 @@ class Auth():
         Returns:
             bool: True if the login is valid, otherwise False.
         """
-        user = self._db._session.query(User).filter_by(email=email).first()
-    
-        if user and bcrypt.checkpw(password.encode('utf-8'), user.hashed_password):
-            return True
-        return False
-
+        try:
+            user = self._db.find_user_by(email=email)
+            return bcrypt.checkpw(password.encode('utf-8'),
+                                  user.hashed_password)
+        except NoResultFound:
+            return False
 
     def _generate_uuid(self) -> str:
         """Generates a new UUID and returns its string representation.
