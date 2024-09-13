@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """Password hashing and authentication management"""
 
+from typing import Optional
 import bcrypt
 import uuid
 from db import DB
 from user import User
 from sqlalchemy.orm.exc import NoResultFound
-from typing import Optional
 
 
 def _hash_password(password: str) -> bytes:
@@ -24,14 +24,13 @@ def _hash_password(password: str) -> bytes:
 
     return hashed_password
 
+
 class Auth():
     """Auth class to interact with the authentication database."""
 
     def __init__(self):
         """Initialize the Auth class with a database instance."""
         self._db = DB()
-
-   
 
     def register_user(self, email: str, password: str) -> User:
         """Register a new user with the given email and password.
@@ -66,7 +65,8 @@ class Auth():
         """
         try:
             user = self._db.find_user_by(email=email)
-            return bcrypt.checkpw(password.encode('utf-8'), user.hashed_password)
+            return bcrypt.checkpw(password.encode('utf-8'),
+                                  user.hashed_password)
         except NoResultFound:
             return False
 
@@ -86,7 +86,7 @@ class Auth():
 
         Returns:
             str: The session ID.
-        
+
         Raises:
             NoResultFound: If no user is found with the provided email.
         """
@@ -99,7 +99,8 @@ class Auth():
         self._db.update_user(user.id, session_id=session_id)
         return session_id
 
-    def get_user_from_session_id(self, session_id: Optional[str]) -> Optional[User]:
+    def get_user_from_session_id(self,
+                                 session_id: Optional[str]) -> Optional[User]:
         """Retrieves the User object corresponding to the session ID.
 
         Args:
@@ -170,4 +171,5 @@ class Auth():
             raise ValueError("Invalid reset token")
 
         hashed_password = self._hash_password(password)
-        self._db.update_user(user.id, hashed_password=hashed_password, reset_token=None)
+        self._db.update_user(user.id, hashed_password=hashed_password,
+                             reset_token=None)
