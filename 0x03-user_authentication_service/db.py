@@ -68,26 +68,26 @@ class DB:
         except InvalidRequestError:
             raise InvalidRequestError("Invalid query arguments")
 
-    # def update_user(self, user_id: int, **kwargs: dict) -> None:
-    #     """Updates user attributes using the user ID.
+    def update_user(self, user_id: int, **kwargs: dict) -> None:
+        """Updates user attributes using the user ID.
 
-    #     Args:
-    #         user_id (int): The ID of the user to update.
-    #         **kwargs: Attributes to update with their new values.
+        Args:
+            user_id (int): The ID of the user to update.
+            **kwargs: Attributes to update with their new values.
 
-    #     Raises:
-    #         NoResultFound: If no user is found with the given ID.
-    #         ValueError: If an invalid attribute is provided.
-    #     """
-    #     try:
-    #         user = self.find_user_by(id=user_id)
-    #     except NoResultFound:
-    #         raise NoResultFound(f"No user found with ID {user_id}")
+        Raises:
+            NoResultFound: If no user is found with the given ID.
+            ValueError: If an invalid attribute is provided.
+        """
+        try:
+            user = self.find_user_by(id=user_id)
+        except NoResultFound:
+            raise NoResultFound(f"No user found with ID {user_id}")
 
-    #     for key, value in kwargs.items():
-    #         if hasattr(user, key):
-    #             setattr(user, key, value)
-    #         else:
-    #             raise ValueError(f"Attribute {key} is not valid")
+        for key, value in kwargs.items():
+            if hasattr(user, key):
+                setattr(user, key, value)
+            else:
+                raise ValueError(f"Attribute {key} is not valid")
 
-    #     self._session.commit()
+        self._session.commit()
