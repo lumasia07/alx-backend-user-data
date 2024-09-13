@@ -1,11 +1,10 @@
 #!/usr/bin/env python3
-"""DB module for interacting with the database"""
+"""DB module for interacting with the database."""
 
 from sqlalchemy import create_engine, Engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-from sqlalchemy.orm.session import Session
-from sqlalchemy.orm.exc import NoResultFound, InvalidRequestError
+from sqlalchemy.orm import sessionmaker, Session
+# from sqlalchemy.orm.exc import NoResultFound, InvalidRequestError
 from user import User, Base
 
 
@@ -46,49 +45,46 @@ class DB:
         self._session.commit()
         return new_user
 
-    def find_user_by(self, **kwargs: dict) -> User:
-        """Finds a user by arbitrary keyword arguments.
+    # def find_user_by(self, **kwargs: dict) -> User:
+    #     """Finds a user by arbitrary keyword arguments.
 
-        Args:
-            **kwargs (dict): Keyword arguments to filter the query.
+    #     Args:
+    #         **kwargs (dict): Keyword arguments to filter the query.
 
-        Returns:
-            User: The User object matching the query.
+    #     Returns:
+    #         User: The User object matching the query.
 
-        Raises:
-            NoResultFound: If no user matches the query.
-            InvalidRequestError: If the query arguments are invalid.
-        """
-        try:
-            return self._session.query(User).filter_by(**kwargs).one()
-        except NoResultFound:
-            raise NoResultFound("No user found with the provided arguments")
-        except InvalidRequestError:
-            raise InvalidRequestError("Invalid query arguments")
+    #     Raises:
+    #         NoResultFound: If no user matches the query.
+    #         InvalidRequestError: If the query arguments are invalid.
+    #     """
+    #     try:
+    #         return self._session.query(User).filter_by(**kwargs).one()
+    #     except NoResultFound:
+    #         raise NoResultFound("No user found with the provided arguments")
+    #     except InvalidRequestError:
+    #         raise InvalidRequestError("Invalid query arguments")
 
-    def update_user(self, user_id: int, **kwargs) -> None:
-        """Updates user attributes using the user ID.
+    # def update_user(self, user_id: int, **kwargs: dict) -> None:
+    #     """Updates user attributes using the user ID.
 
-        Args:
-            user_id (int): The ID of the user to update.
-            **kwargs: Attributes to update with their new values.
+    #     Args:
+    #         user_id (int): The ID of the user to update.
+    #         **kwargs: Attributes to update with their new values.
 
-        Returns:
-            None
+    #     Raises:
+    #         NoResultFound: If no user is found with the given ID.
+    #         ValueError: If an invalid attribute is provided.
+    #     """
+    #     try:
+    #         user = self.find_user_by(id=user_id)
+    #     except NoResultFound:
+    #         raise NoResultFound(f"No user found with ID {user_id}")
 
-        Raises:
-            NoResultFound: If no user is found with the given ID.
-            ValueError: If an invalid attribute is provided.
-        """
-        try:
-            user = self.find_user_by(id=user_id)
-        except NoResultFound:
-            raise NoResultFound(f"No user found with ID {user_id}")
+    #     for key, value in kwargs.items():
+    #         if hasattr(user, key):
+    #             setattr(user, key, value)
+    #         else:
+    #             raise ValueError(f"Attribute {key} is not a valid user attribute")
 
-        for key, value in kwargs.items():
-            if hasattr(user, key):
-                setattr(user, key, value)
-            else:
-                raise ValueError(f"Attribute {key} is not a valid user attribute")
-
-        self._session.commit()
+    #     self._session.commit()
