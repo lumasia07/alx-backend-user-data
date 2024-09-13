@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-"""DB module for interacting with the database."""
 """DB module
 """
 from sqlalchemy import create_engine
@@ -86,6 +85,6 @@ class DB:
     #         if hasattr(user, key):
     #             setattr(user, key, value)
     #         else:
-    #             raise ValueError(f"Attribute {key} is not a valid user attribute")
+    #             raise ValueError(f"Attribute {key} is not valid")
 
     #     self._session.commit()
